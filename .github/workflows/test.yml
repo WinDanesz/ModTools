@@ -1,0 +1,26 @@
+name: 'Build Mod'
+on:
+  push:
+
+jobs:
+  build:
+    name: test 
+    runs-on: ubuntu-latest
+    steps:
+      - {uses: actions/checkout@v1}
+
+      - name: Update latest version in ./forge/update.json
+        shell: pwsh
+      - run: |
+          $oldJson = Get-Content .\.forge\update.json | ConvertFrom-Json
+          $oldJson.promos.'1.12.2-latest' = "999
+          $oldJson.promos.'1.12.2-recommended' = "888
+          $newJson = $oldJson | ConvertTo-Json
+          Set-Content -Path .\.forge\update.json -Value $newJson
+
+      - name: Commit Changelogs and update.json
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          branch: 1.12.2
+          commit_message: 'docs: update changelogs for ${{ github.ref_name }}'
+
