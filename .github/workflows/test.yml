@@ -27,6 +27,6 @@ jobs:
       - name: Commit Changelogs and update.json
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          branch: 1.12.2
+          branch: 1.12.2 
           commit_message: 'docs: update changelogs for ${{ github.ref_name }}'
 
