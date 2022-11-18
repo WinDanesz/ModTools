@@ -18,9 +18,7 @@ jobs:
           $oldJson.promos.'1.12.2-latest' = $version
           $oldJson.promos.'1.12.2-recommended' = $version
           $gradleProperties = Get-Content ./gradle.properties
-          if ($($gradleProperties -match "\surl=") -match "url=(.*)") {
-              $oldJson.homepage =$matches[1]
-          }
+          if ($($gradleProperties -match "\surl=") -match "url=(.*)") { $oldJson.homepage =$matches[1] }
           $newJson = $oldJson | ConvertTo-Json
           Set-Content -Path .\.forge\update.json -Value $newJson
 
