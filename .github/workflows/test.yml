@@ -19,9 +19,9 @@ jobs:
         shell: pwsh
         run: |
           Copy-Item ./ModTools/.github/ISSUE_TEMPLATE ./.github -Force
-          Copy-Item ./ModTools/.github/workflows/*.md ./.github -Force
-          Copy-Item ./ModTools/.github/workflows/gradle.yml ./.github -Force
-          Copy-Item ./ModTools/.github/workflows/potential-duplicates.yml ./.github -Force
+          Copy-Item ./ModTools/.github/workflows/*.md ./.github/workflows/ -Force
+          Copy-Item ./ModTools/.github/workflows/gradle.yml ./.github/workflows/ -Force
+          Copy-Item ./ModTools/.github/workflows/potential-duplicates.yml ./.github/workflows/ -Force
           Copy-Item ./ModTools/.github/FUNDING.yml ./.github -Force
           Remove-Item ./ModTools -Recurse -Force
 
