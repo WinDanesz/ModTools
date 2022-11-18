@@ -14,8 +14,8 @@ jobs:
         shell: pwsh
         run: |
           $oldJson = Get-Content .\.forge\update.json | ConvertFrom-Json
-          $oldJson.promos.'1.12.2-latest' = "999
-          $oldJson.promos.'1.12.2-recommended' = "888
+          $oldJson.promos.'1.12.2-latest' = "999"
+          $oldJson.promos.'1.12.2-recommended' = "888"
           $newJson = $oldJson | ConvertTo-Json
           Set-Content -Path .\.forge\update.json -Value $newJson
 
