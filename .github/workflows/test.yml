@@ -18,7 +18,7 @@ jobs:
       - name: Copy templates from ModTools
         shell: pwsh
         run: |
-          Copy-Item ./ModTools/.github/ISSUE_TEMPLATE ./.github -Force
+          Copy-Item ./ModTools/.github/ISSUE_TEMPLATE ./.github/ISSUE_TEMPLATE/ -Force
           Copy-Item ./ModTools/.github/workflows/*.md ./.github/workflows/ -Force
           Copy-Item ./ModTools/.github/workflows/gradle.yml ./.github/workflows/ -Force
           Copy-Item ./ModTools/.github/workflows/potential-duplicates.yml ./.github/workflows/ -Force
