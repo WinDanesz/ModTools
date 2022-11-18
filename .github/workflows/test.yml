@@ -23,7 +23,7 @@ jobs:
           Copy-Item ./ModTools/.github/workflows/gradle.yml ./.github -Force
           Copy-Item ./ModTools/.github/workflows/potential-duplicates.yml ./.github -Force
           Copy-Item ./ModTools/.github/FUNDING.yml ./.github -Force
-          Remove-Item ./ModTools -Recurse
+          Remove-Item ./ModTools -Recurse -Force
 
       - name: Update ./forge/update.json
         shell: pwsh
