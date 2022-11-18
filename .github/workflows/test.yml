@@ -4,13 +4,28 @@ on:
 
 jobs:
   build:
-    name: test 
+    name: test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Update latest version in ./forge/update.json
+      - name: Checkout ModTools repo
+        uses: actions/checkout@v3
+        with:
+          path: ModTools
+
+      - name: Copy templates from ModTools
+        shell: pwsh
+        run: |
+          Copy-Item ./ModTools/.github/ISSUE_TEMPLATE ./.github
+          Copy-Item ./ModTools/.github/workflows/*.md ./.github
+          Copy-Item ./ModTools/.github/workflows/gradle.yml ./.github
+          Copy-Item ./ModTools/.github/workflows/potential-duplicates.yml ./.github
+          Copy-Item ./ModTools/.github/FUNDING.yml ./.github
+          Remove-Item ./ModTools -Recurse
+
+      - name: Update ./forge/update.json
         shell: pwsh
         run: |
           $version = "222" # TODO: Update to an actual variable
@@ -25,6 +40,6 @@ jobs:
       - name: Commit Changelogs and update.json
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          branch: 1.12.2 
+          branch: 1.12.2
           commit_message: 'docs: update changelogs for ${{ github.ref_name }}'
 
