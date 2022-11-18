@@ -18,11 +18,11 @@ jobs:
       - name: Copy templates from ModTools
         shell: pwsh
         run: |
-          Copy-Item ./ModTools/.github/ISSUE_TEMPLATE ./.github
-          Copy-Item ./ModTools/.github/workflows/*.md ./.github
-          Copy-Item ./ModTools/.github/workflows/gradle.yml ./.github
-          Copy-Item ./ModTools/.github/workflows/potential-duplicates.yml ./.github
-          Copy-Item ./ModTools/.github/FUNDING.yml ./.github
+          Copy-Item ./ModTools/.github/ISSUE_TEMPLATE ./.github -Force
+          Copy-Item ./ModTools/.github/workflows/*.md ./.github -Force
+          Copy-Item ./ModTools/.github/workflows/gradle.yml ./.github -Force
+          Copy-Item ./ModTools/.github/workflows/potential-duplicates.yml ./.github -Force
+          Copy-Item ./ModTools/.github/FUNDING.yml ./.github -Force
           Remove-Item ./ModTools -Recurse
 
       - name: Update ./forge/update.json
