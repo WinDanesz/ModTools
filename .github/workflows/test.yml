@@ -16,6 +16,9 @@ jobs:
           $oldJson = Get-Content .\.forge\update.json | ConvertFrom-Json
           $oldJson.promos.'1.12.2-latest' = "999"
           $oldJson.promos.'1.12.2-recommended' = "888"
+          if ($($properties -match "\surl=") -match "url=(.*)") {
+              $oldJson.homepage = $matches[1]
+          }
           $newJson = $oldJson | ConvertTo-Json
           Set-Content -Path .\.forge\update.json -Value $newJson
 
