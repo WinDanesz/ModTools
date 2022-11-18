@@ -35,25 +35,13 @@ jobs:
           Copy-Item ./ModTools/.github/FUNDING.yml ./.github -Force
           Remove-Item ./ModTools -Recurse -Force
 
-      - name: Update ./forge/update.json
-        shell: pwsh
-        run: |
-          $version = "222" # TODO: Update to an actual variable
-          $oldJson = Get-Content .\.forge\update.json | ConvertFrom-Json
-          $oldJson.promos.'1.12.2-latest' = $version
-          $oldJson.promos.'1.12.2-recommended' = $version
-          $gradleProperties = Get-Content ./gradle.properties
-          if ($($gradleProperties -match "\surl=") -match "url=(.*)") { $oldJson.homepage =$matches[1] }
-          $newJson = $oldJson | ConvertTo-Json
-          Set-Content -Path .\.forge\update.json -Value $newJson
-
       - name: Setup Build
         run: 'chmod 777 gradlew'
 
       - name: Get the version
         id: get_version
         run: |
-          echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -c 11-)
+          echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -c 12-)
           echo ::set-output name=VERSION_WITH_PREFIX::$(echo $GITHUB_REF)
 
       - name: Build with Gradle
@@ -122,6 +110,18 @@ jobs:
           project_id: "${{ steps.build.outputs.curse_project_id }}"
           release_type: release
           token: "${{ secrets.CURSEFORGE_API_TOKEN }}"
+
+      - name: Update ./forge/update.json
+        shell: pwsh
+        run: |
+          $version = ${{ steps.get_version.outputs.VERSION }}
+          $oldJson = Get-Content .\.forge\update.json | ConvertFrom-Json
+          $oldJson.promos.'1.12.2-latest' = $version
+          $oldJson.promos.'1.12.2-recommended' = $version
+          $gradleProperties = Get-Content ./gradle.properties
+          if ($($gradleProperties -match "\surl=") -match "url=(.*)") { $oldJson.homepage =$matches[1] }
+          $newJson = $oldJson | ConvertTo-Json
+          Set-Content -Path .\.forge\update.json -Value $newJson
 
       - name: Generate Discord Announcement With Changelog
         id: discord-changelog-generator
