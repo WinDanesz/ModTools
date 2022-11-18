@@ -7,11 +7,12 @@ jobs:
     name: test 
     runs-on: ubuntu-latest
     steps:
-      - {uses: actions/checkout@v1}
+      - name: Checkout
+        uses: actions/checkout@v2
 
       - name: Update latest version in ./forge/update.json
         shell: pwsh
-      - run: |
+        run: |
           $oldJson = Get-Content .\.forge\update.json | ConvertFrom-Json
           $oldJson.promos.'1.12.2-latest' = "999
           $oldJson.promos.'1.12.2-recommended' = "888
