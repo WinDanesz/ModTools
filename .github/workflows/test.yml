@@ -13,11 +13,13 @@ jobs:
       - name: Update latest version in ./forge/update.json
         shell: pwsh
         run: |
+          $version = "222" # TODO: Update to an actual variable
           $oldJson = Get-Content .\.forge\update.json | ConvertFrom-Json
-          $oldJson.promos.'1.12.2-latest' = "999"
-          $oldJson.promos.'1.12.2-recommended' = "888"
-          if ($($properties -match "\surl=") -match "url=(.*)") {
-              $oldJson.homepage = $matches[1]
+          $oldJson.promos.'1.12.2-latest' = $version
+          $oldJson.promos.'1.12.2-recommended' = $version
+          $gradleProperties = Get-Content ./gradle.properties
+          if ($($gradleProperties -match "\surl=") -match "url=(.*)") {
+              $oldJson.homepage =$matches[1]
           }
           $newJson = $oldJson | ConvertTo-Json
           Set-Content -Path .\.forge\update.json -Value $newJson
