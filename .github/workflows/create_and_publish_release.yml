@@ -153,7 +153,13 @@ jobs:
           if ($($gradleProperties -match "\surl=") -match "url=(.*)") { $oldJson.homepage =$matches[1] }
           $newJson = $oldJson | ConvertTo-Json
           Set-Content -Path .\.forge\update.json -Value $newJson
-
+          
+      - name: Commit Changelogs and update.json
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          branch: 1.12.2
+          commit_message: 'docs: update changelogs for ${{ github.ref_name }}'
+          
       - name: Generate Discord Announcement With Changelog
         id: discord-changelog-generator
         uses: Helmisek/conventional-changelog-generator@v1.0.6-release
