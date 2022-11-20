@@ -97,7 +97,24 @@ jobs:
           write-mode: overwrite
 
       - name: Upload Release to CurseForge
-        id: publish
+        if: ${{ steps.build.outputs.curse_relations != '' }}
+        id: publish_with_relations
+        uses: itsmeow/curseforge-upload@master
+        with:
+          changelog: "${{steps.changelog-generator.outputs.changelog}}"
+          changelog_type: html
+          # display_name: use the filename
+          relations: "${{ steps.build.outputs.curse_relations }}"
+          file_path: "./build/libs/${{ steps.get_jar_name.outputs.jar_name }}"
+          game_endpoint: minecraft
+          game_versions: "${{ steps.build.outputs.curse_versions }}"
+          project_id: "${{ steps.build.outputs.curse_project_id }}"
+          release_type: release
+          token: "${{ secrets.CURSEFORGE_API_TOKEN }}"
+
+      - name: Upload Release to CurseForge
+        if: ${{ steps.build.outputs.curse_relations == '' }}
+        id: publish_without_relations
         uses: itsmeow/curseforge-upload@master
         with:
           changelog: "${{steps.changelog-generator.outputs.changelog}}"
@@ -141,13 +158,24 @@ jobs:
           write-mode: overwrite
 
       - name: Replace Tokens in Discord Announcement
+        if: ${{ steps.build.outputs.curse_relations == '' }}
         uses: cschleiden/replace-tokens@v1
         with:
           files: ${{ github.workspace }}/.github/DISCORD_ANNOUNCEMENT.txt
         env:
           MOD_NAME: "${{ steps.build.outputs.name }}"
           URL: "${{ steps.build.outputs.url }}"
-          FILE_ID: "${{ steps.publish.outputs.id }}"
+          FILE_ID: "${{ steps.publish_without_relations.outputs.id }}"
+
+      - name: Replace Tokens in Discord Announcement
+        if: ${{ steps.build.outputs.curse_relations != '' }}
+        uses: cschleiden/replace-tokens@v1
+        with:
+          files: ${{ github.workspace }}/.github/DISCORD_ANNOUNCEMENT.txt
+        env:
+          MOD_NAME: "${{ steps.build.outputs.name }}"
+          URL: "${{ steps.build.outputs.url }}"
+          FILE_ID: "${{ steps.publish_with.outputs.id }}"
 
       - name: Read Discord Announcement From File
         id: announcement-content
