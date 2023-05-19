@@ -134,7 +134,8 @@ jobs:
       - name: Update ./forge/update.json
         shell: pwsh
         run: |
-          $version = ${{ steps.get_version.outputs.VERSION }}
+          $version = "${{ steps.get_version.outputs.VERSION }}"
+          Write-Host "New version will be $version"
           $jsonObj = Get-Content .\.forge\update.json | ConvertFrom-Json
           Write-Host "Content before: "
           Get-Content .\.forge\update.json
