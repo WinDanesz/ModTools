@@ -135,15 +135,14 @@ jobs:
         shell: pwsh
         run: |
           $version = ${{ steps.get_version.outputs.VERSION }}
-          $oldJson = Get-Content .\.forge\update.json | ConvertFrom-Json
+          $jsonObj = Get-Content .\.forge\update.json | ConvertFrom-Json
           Write-Host "Content before: "
           Get-Content .\.forge\update.json
-          $oldJson.promos.'1.12.2-latest' = $version
-          $oldJson.promos.'1.12.2-recommended' = $version
+          $jsonObj.promos.'1.12.2-latest' = $version
+          $jsonObj.promos.'1.12.2-recommended' = $version
           $gradleProperties = Get-Content ./gradle.properties
-          if ($($gradleProperties -match "\surl=") -match "url=(.*)") { $oldJson.homepage =$matches[1] }
-          $newJson = $oldJson | ConvertTo-Json
-          Set-Content -Path .\.forge\update.json -Value $newJson
+          if ($($gradleProperties -match "\surl=") -match "url=(.*)") { $jsonObj.homepage = $matches[1] }
+          Set-Content -Path .\.forge\update.json -Value $jsonObj
           Write-Host "Content after: "
           Get-Content .\.forge\update.json
 
