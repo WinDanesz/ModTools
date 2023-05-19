@@ -142,7 +142,7 @@ jobs:
           $jsonObj.promos.'1.12.2-recommended' = $version
           $gradleProperties = Get-Content ./gradle.properties
           if ($($gradleProperties -match "\surl=") -match "url=(.*)") { $jsonObj.homepage = $matches[1] }
-          Set-Content -Path .\.forge\update.json -Value $jsonObj
+          Set-Content -Path .\.forge\update.json -Value ($jsonObj | ConvertTo-Json)
           Write-Host "Content after: "
           Get-Content .\.forge\update.json
 
