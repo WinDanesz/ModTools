@@ -79,15 +79,6 @@ jobs:
           files: |
             "./build/libs/${{ steps.get_jar_name.outputs.jar_name }}"
 
-#      - name: Create release
-#        uses: ncipollo/release-action@v1
-#        with:
-#          allowUpdates: true
-#          draft: false
-#          name: ${{ github.ref_name }}
-#          body: ${{ steps.changelog.outputs.changes }}
-#          token: ${{ github.token }}
-
       - name: Update main CHANGELOG.md
         id: changelog
         uses: Requarks/changelog-action@v1
@@ -147,12 +138,16 @@ jobs:
         run: |
           $version = ${{ steps.get_version.outputs.VERSION }}
           $oldJson = Get-Content .\.forge\update.json | ConvertFrom-Json
+          Write-Host "Content before: "
+          Get-Content .\.forge\update.json
           $oldJson.promos.'1.12.2-latest' = $version
           $oldJson.promos.'1.12.2-recommended' = $version
           $gradleProperties = Get-Content ./gradle.properties
           if ($($gradleProperties -match "\surl=") -match "url=(.*)") { $oldJson.homepage =$matches[1] }
           $newJson = $oldJson | ConvertTo-Json
           Set-Content -Path .\.forge\update.json -Value $newJson
+          Write-Host "Content after: "
+          Get-Content .\.forge\update.json
           
       - name: Commit Changelogs and update.json
         uses: stefanzweifel/git-auto-commit-action@v4
