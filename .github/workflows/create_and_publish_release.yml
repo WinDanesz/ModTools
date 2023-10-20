@@ -69,13 +69,13 @@ jobs:
           ls ./build/libs/
           echo ::set-output name=jar_name::$(ls ./build/libs/)
 
-      #- name: Create release
-      #  uses: "marvinpinto/action-automatic-releases@latest"
-      #  with:
-      #    repo_token: "${{ secrets.GITHUB_TOKEN }}"
-      #    prerelease: false
-      #    files: |
-      #      "./build/libs/${{ steps.get_jar_name.outputs.jar_name }}"
+      - name: Create release
+        uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          prerelease: false
+          files: |
+            "./build/libs/${{ steps.get_jar_name.outputs.jar_name }}"
 
       - name: Update main CHANGELOG.md
         id: changelog
