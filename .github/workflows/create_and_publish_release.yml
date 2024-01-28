@@ -148,7 +148,7 @@ jobs:
           Get-Content .\.forge\update.json
 
       - name: Commit Changelogs and update.json
-        uses: stefanzweifel/git-auto-commit-action@v4
+        uses: stefanzweifel/git-auto-commit-action@v5
         with:
           branch: 1.12.2
           commit_message: 'docs: update changelogs for ${{ github.ref_name }}'
