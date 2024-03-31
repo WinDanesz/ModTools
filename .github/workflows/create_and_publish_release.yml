@@ -75,7 +75,7 @@ jobs:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: false
           files: |
-            "./build/libs/${{ steps.get_jar_name.outputs.jar_name }}"
+            "${{ github.workspace }}/build/libs/${{ steps.get_jar_name.outputs.jar_name }}"
 
       - name: Update main CHANGELOG.md
         id: changelog
