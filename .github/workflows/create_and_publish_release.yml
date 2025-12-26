@@ -187,6 +187,16 @@ jobs:
           URL: "${{ steps.build.outputs.url }}"
           FILE_ID: "${{ steps.publish_without_relations.outputs.id }}"
 
+      - name: Replace Tokens in Discord Announcement
+        if: ${{ steps.build.outputs.curse_relations == '' }}
+        uses: cschleiden/replace-tokens@v1
+        with:
+          files: ${{ github.workspace }}/.github/DISCORD_ANNOUNCEMENT.txt
+        env:
+          MOD_NAME: "${{ steps.build.outputs.name }}"
+          URL: "${{ steps.build.outputs.url }}"
+          FILE_ID: "${{ steps.publish_without_relations.outputs.id }}"
+
       - name: Read Discord Announcement From File
         id: announcement-content
         uses: juliangruber/read-file-action@v1
