@@ -65,7 +65,7 @@ jobs:
         env:
           USE_ALPHAS: false
         run: |
-          PROJECT_VERSION=${{ steps.get_version.outputs.VERSION }} ./gradlew build --max-workers=1
+          PROJECT_VERSION=${{ steps.get_version.outputs.VERSION }} ./gradlew setupGithubActions build --max-workers=1
 
       - name: Get .jar name
         id: get_jar_name
