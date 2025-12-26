@@ -29,7 +29,6 @@ jobs:
           Copy-Item ./ModTools/.github/ISSUE_TEMPLATE ./.github/ISSUE_TEMPLATE/ -Force
           Copy-Item ./ModTools/.github/workflows/*.md ./.github/workflows/ -Force
           Copy-Item ./ModTools/.github/workflows/gradle.yml ./.github/workflows/ -Force
-          Copy-Item ./ModTools/.github/workflows/potential-duplicates.yml ./.github/workflows/ -Force
           Copy-Item ./ModTools/.github/FUNDING.yml ./.github -Force
           Remove-Item ./ModTools -Recurse -Force
 
