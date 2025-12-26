@@ -8,6 +8,11 @@ on:
         required: true
       DISCORD_ANNOUNCER_WEBHOOK:
         required: true
+    inputs:
+      build-only:
+        required: false
+        default: false
+        type: boolean
 
 jobs:
 
@@ -69,6 +74,7 @@ jobs:
           echo ::set-output name=jar_name::$(ls ./build/libs/)
 
       - name: Create release
+        if: ${{ inputs.build-only == false }}
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
@@ -90,6 +96,7 @@ jobs:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           commit-types: "fix:Bug Fixes,feat:Features,refactor:Refactoring"
           template-path: ".github/workflows/CURSEFORGE_CHANGELOG.tpl.md"
+
       - name: Write curseforge changelog to file
         uses: DamianReeves/write-file-action@master
         with:
@@ -99,7 +106,7 @@ jobs:
           write-mode: overwrite
 
       - name: Upload Release to CurseForge
-        if: ${{ steps.build.outputs.curse_relations != '' }}
+        if: ${{ inputs.build-only == false && steps.build.outputs.curse_relations != '' }}
         id: publish_with_relations
         uses: itsmeow/curseforge-upload@master
         with:
@@ -115,7 +122,7 @@ jobs:
           token: "${{ secrets.CURSEFORGE_API_TOKEN }}"
 
       - name: Upload Release to CurseForge
-        if: ${{ steps.build.outputs.curse_relations == '' }}
+        if: ${{ inputs.build-only == false && steps.build.outputs.curse_relations == '' }}
         id: publish_without_relations
         uses: itsmeow/curseforge-upload@master
         with:
@@ -147,6 +154,7 @@ jobs:
           Get-Content .\.forge\update.json
 
       - name: Commit Changelogs and update.json
+        if: ${{ inputs.build-only == false }}
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           branch: 1.12.2
@@ -179,16 +187,6 @@ jobs:
           URL: "${{ steps.build.outputs.url }}"
           FILE_ID: "${{ steps.publish_without_relations.outputs.id }}"
 
-      - name: Replace Tokens in Discord Announcement
-        if: ${{ steps.build.outputs.curse_relations != '' }}
-        uses: cschleiden/replace-tokens@v1
-        with:
-          files: ${{ github.workspace }}/.github/DISCORD_ANNOUNCEMENT.txt
-        env:
-          MOD_NAME: "${{ steps.build.outputs.name }}"
-          URL: "${{ steps.build.outputs.url }}"
-          FILE_ID: "${{ steps.publish_with.outputs.id }}"
-
       - name: Read Discord Announcement From File
         id: announcement-content
         uses: juliangruber/read-file-action@v1
@@ -196,6 +194,7 @@ jobs:
           path: ${{ github.workspace }}/.github/DISCORD_ANNOUNCEMENT.txt
 
       - name: Discord Webhook Action
+        if: ${{ inputs.build-only == false }}
         uses: tsickert/discord-webhook@v4.0.0
         with:
           webhook-url: ${{ secrets.DISCORD_ANNOUNCER_WEBHOOK }}
